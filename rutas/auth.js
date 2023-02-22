@@ -1,6 +1,6 @@
 const {Router, request} = require('express')
 const { registrar, loguear} = require('../controladores/auth');
-const {check} = request('express-validator')
+const { check } = require('express-validator')
 const router = Router()
 
 //ruta raíz
