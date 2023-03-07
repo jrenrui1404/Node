@@ -1,7 +1,8 @@
 const {Router} = require('express');
-const { registrar, loguear } = require('../controladores/auth');
+const { registrar, loguear, revalidar } = require('../controladores/auth');
 const { check } = require('express-validator')
 const { validarCampos } = require('../middleware/validator')
+const {validarJWT} = require('../middleware/validar-token')
 
 const router = Router();
 
@@ -28,4 +29,5 @@ router.post("/login",
     ], 
     loguear)
 
+router.get('/revalidar', validarJWT, revalidar)
 module.exports = router

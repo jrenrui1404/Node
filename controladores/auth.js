@@ -26,7 +26,8 @@ const registrar = async (req, res = response) =>{
                 ok : true,
                 mensaje: "registro",
                 nombre: usuario.nombre,
-                email: usuario.email
+                email: usuario.email,
+                token
     })    
     } catch (error) {
         return res.status(500).json({
@@ -71,6 +72,16 @@ const loguear = async (req, res = response) => {
     
 }
 
+const revalidar = async (req, res = response) => {
+    const { id, nombre } = req
+    const token = await generarJWT(id, nombre)
+    res.json({
+        ok: true,
+        mensaje: 'Revalidando token',
+        token
+    })
+}
+
 module.exports = {
-    registrar, loguear
+    registrar, loguear, revalidar
 }

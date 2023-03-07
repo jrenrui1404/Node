@@ -3,9 +3,11 @@
 //console.log("Api REST");
 
 const express = require('express')
-const router = require('./rutas/auth')
+
 require("dotenv").config()
 const auth = require('./rutas/auth')
+const coche = require('./rutas/coche')
+
 const { conexion } = require('./database/config')
 //console.log(process.env.PORT)
 
@@ -20,9 +22,12 @@ app.use(express.json())
 
 //ruta raíz
 {/*app.get('/', function (req, res) {
-  res.send('Hello World MIL MARAVILLAS')
+  res.send('Hello World')
 })*/}
+
 app.use('/api/user', auth)
+app.use('/api/car', coche)
+
 
 const PORT = process.env.PORT || 3000 
 
