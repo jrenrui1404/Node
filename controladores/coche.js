@@ -64,6 +64,7 @@ const listarCoches = async (req, res = response) => {
     
 }
 
+//actualizamos
 const actualizaCoche = async (req, res = response) => {
 
     const { bastidor } = req.params;
@@ -89,7 +90,7 @@ const actualizaCoche = async (req, res = response) => {
     }
 }
 
-
+//borramos
 const eliminaCoche = async (req, res = response) => {
 
     const { bastidor } = req.params;
