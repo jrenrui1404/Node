@@ -1,7 +1,8 @@
-const {response} = require('express')
+const {response, request} = require('express')
 const bcrypt = require('bcryptjs');
-const Usuario = require('../modelos/Usuario')
 const salt = bcrypt.genSaltSync(10);
+const Usuario = require('../modelos/Usuario')
+const { generarJWT } = require('../helper/jwt')
 
 const registrar = async (req, res = response) =>{
     //const {nombre, email, password} = req.body 
@@ -18,7 +19,9 @@ const registrar = async (req, res = response) =>{
         }
         usuario = new Usuario(req.body)
         usuario.password = bcrypt.hashSync(password, salt)
-        await usuario.save();
+        await usuario.save()
+        //generar token
+        const token = await generarJWT(usuario.id, usuario.nombre)
         return res.status(201).json({
                 ok : true,
                 mensaje: "registro",
@@ -50,11 +53,14 @@ const loguear = async (req, res = response) => {
                 mensaje : 'Credenciales erróneas'
             })
         }
-        res.json({
+        //generar token
+        const token = await generarJWT(usuario.id, usuario.nombre)
+        return res.json({
             ok : true,
             mensaje: "Login",
             email,
-            id: usuario.id
+            id: usuario.id,
+            token
         })
     }catch {
         res.status(500).json({
