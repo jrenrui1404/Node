@@ -28,26 +28,41 @@ const registrar = async (req, res = response) =>{
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            mensaje: 'error en el servidor'
+            mensaje: 'Error en el servidor'
         })
     }    
 }
 
-const loguear = (req, res = response) =>{
+const loguear = async (req, res = response) => {
+
     const {email, password} = req.body 
-    const errores = validationResult(req)
-    console.log(errores);
-    if (! errores.isEmpty()){
-        return res.status(400).json({
-            ok : false,
-            mensaje : errores.mapped()
-        }) 
+    try{
+        let usuario = await Usuario.findOne({email})
+        if (!usuario){
+            return res.status(400).json({
+                ok: false,
+                mensaje : 'Usuario no existe en el BD'
+            })
+        }
+        if (! bcrypt.compareSync(password, usuario.password)){
+            return res.status(400).json({
+                ok: false,
+                mensaje : 'Credenciales erróneas'
+            })
+        }
+        res.json({
+            ok : true,
+            mensaje: "Login",
+            email,
+            id: usuario.id
+        })
+    }catch {
+        res.status(500).json({
+            ok: false,
+            mensaje: 'Error en el servidor'
+        })
     }
-    res.json({
-        mensaje: "login",
-        email,
-        password
-    })    
+    
 }
 
 module.exports = {
